@@ -1,4 +1,48 @@
 package com.tenco.csr_blog_v1.core.util;
 
+import com.tenco.csr_blog_v1.user.User;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class JwtProviderTest {
+
+    private JwtProvider jwtProvider;
+    private User user;
+    private String validToken;
+
+    // 각각의 테스트 메서드가 실행하기 전에 공통적으로 실행되는 코드를 사용할 때 선언
+    @BeforeEach
+    public void setUp() {
+        jwtProvider = new JwtProvider();
+
+        user = User.builder()
+                .id(2)
+                .username("cos")
+                .roles(List.of("USER", "ADMIN"))
+                .build();
+
+        validToken = JwtUtil.create(user);
+    }
+
+    // 테스트코드
+    @Test
+    public void resolveToken_test() {
+
+        // GIVEN
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader(JwtUtil.HEADER, validToken);
+
+        //WHEN
+        String resolvedToken = jwtProvider.resolveToke(request);
+
+        //THEN
+        String expectedToken = validToken.replace(JwtUtil.TOKEN_PREFIX, "");
+        assertThat(resolvedToken).isEqualTo(expectedToken);
+
+    }
 }
