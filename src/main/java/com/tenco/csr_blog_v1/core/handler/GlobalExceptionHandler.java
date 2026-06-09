@@ -19,25 +19,25 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<?> exApi401(BadRequestException e){
+    public ResponseEntity<?> exApi401(UnauthorizedException e){
         log.warn("[WARN] 사용자 인증 실패 :" + e.getMessage());
         return Resp.fail(HttpStatus.UNAUTHORIZED,e.getMessage());
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<?> exApi403(BadRequestException e){
+    public ResponseEntity<?> exApi403(ForbiddenException e){
         log.warn("[WARN] 사용자 권한 실패 :" + e.getMessage());
         return Resp.fail(HttpStatus.FORBIDDEN,e.getMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<?> exApi404(BadRequestException e){
+    public ResponseEntity<?> exApi404(NotFoundException e){
         log.warn("[WARN] 사용자 자원 찾기 실패 :" + e.getMessage());
         return Resp.fail(HttpStatus.NOT_FOUND,e.getMessage());
     }
 
     @ExceptionHandler(InternalServerException.class)
-    public ResponseEntity<?> exApi500(BadRequestException e){
+    public ResponseEntity<?> exApi500(InternalServerException e){
         log.warn("[WARN] 예상 가능한 서버 오류 :" + e.getMessage());
         return Resp.fail(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
     }
